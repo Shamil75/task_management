@@ -1,5 +1,5 @@
 from django import forms
-from tasks.models import Task
+from tasks.models import Task, TaskDetail
 #django Form
 class TaskForm(forms.Form):
     title = forms.CharField(max_length=250, label="Task Title")
@@ -52,27 +52,18 @@ class TaskModelForm(StyledFormMisin, forms.ModelForm):
             'due_date': forms.SelectDateWidget,
             'assigned_to': forms.CheckboxSelectMultiple
         }
-        # exclude = ['project', 'is_completed', 'created_at', 'updated_at']
-        """Manual Widget"""
-        # widgets = {
-        #     'title': forms.TextInput(attrs={
-        #         'class': "border-2 border-gray-300 w-full p-3 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500",
-        #         'placeholder':"Enter a descriptive task title",
-        #     }),
-        #     'description': forms.Textarea(attrs={
-        #         'class': "border-2 border-gray-300 w-full p-3 rounded-lg shadow-sm resize-none focus:outline-none focus:border-rose-500 focus:ring-rose-500",
-        #         'placeholder':"Provide detailed task information",
-        #         'rows': 5, # Added to define a consistent textarea height
-        #     }),
-        #     'due_date': forms.SelectDateWidget(attrs={
-        #         'class': "border-2 border-gray-300 p-2 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500",
-        #     }),
-        #     'assigned_to': forms.CheckboxSelectMultiple(attrs={
-        #         'class': "space-y-2", # Added spacing between checkboxes for better readability
-        #     }),
-        # }
-    
+
     """Widget using mixing"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+
+class TaskDetailModelForm(StyledFormMisin, forms.ModelForm):
+    class Meta:
+        model = TaskDetail
+        fields = ['priority', 'notes']
+
+    def __init__(self, *arg, **kwarg):
+        super().__init__(*arg, **kwarg)
         self.apply_styled_widgets()
